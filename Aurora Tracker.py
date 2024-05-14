@@ -35,6 +35,10 @@ async def slash_command(interaction:discord.Interaction):
     urllib.request.urlretrieve(data_url, pathed_filename)
     await interaction.response.send_message(file=discord.File(pathed_filename))
 
+@bot.tree.command(name="now", description="The current Aurora prediction for your moment in time")
+async def slash_command(interaction:discord.Interaction):
+    await interaction.response.send_message(embed=embeded)
+
 @bot.tree.command(name="help", description="Help with using the Aurora Tracker")
 async def slash_command(interaction:discord.Interaction):
     embeded=discord.Embed(title="Aurora Borealis Tracker Commands", description="This bot is designed to provide Aurora Borealis Forecast in Discord.\n\n**Commands:**\n•`/tonight` This displays the NOAA Forcast for tonight\n\n•`/tomorrow` This displays the NOAA Forcast for tomorrow\n\n•`/help` You just used this command", color=0xe100ff)
@@ -59,7 +63,7 @@ async def ovation(ctx):
         y = json.loads(x)
         data_url = "https://services.swpc.noaa.gov/" + y["url"]
         image_name = "aurora_North_" + str(index) + ".jpg"
-        myPath = ".\image"
+        myPath = "./image"
         fullfilename = os.path.join(myPath, image_name)
         #await ctx.send(fullfilename)
         urllib.request.urlretrieve(data_url, fullfilename)
