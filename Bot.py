@@ -1,12 +1,10 @@
 import os
+import asyncio
 import discord
-import json
 import urllib.request
 import AuroraToolbox as Toolbox
 
-
 from urllib.request import urlopen 
-#from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
 
@@ -15,7 +13,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 intents = discord.Intents.default()
 intents.message_content = True
-bot = commands.Bot(command_prefix="$", intents=intents)
+bot = commands.Bot(command_prefix="/", intents=intents)
 
 @bot.event
 async def on_ready():
@@ -37,39 +35,23 @@ async def slash_command(interaction:discord.Interaction):
 
 @bot.tree.command(name="now", description="The current Aurora prediction for your moment in time")
 async def slash_command(interaction:discord.Interaction):
+    embeded=discord.Embed(title="The Aurora Now", description="This is not done yet", color=0xe100ff)
     await interaction.response.send_message(embed=embeded)
 
 @bot.tree.command(name="help", description="Help with using the Aurora Tracker")
 async def slash_command(interaction:discord.Interaction):
     embeded=discord.Embed(title="Aurora Borealis Tracker Commands", description="This bot is designed to provide Aurora Borealis Forecast in Discord.\n\n**Commands:**\n•`/tonight` This displays the NOAA Forcast for tonight\n\n•`/tomorrow` This displays the NOAA Forcast for tomorrow\n\n•`/help` You just used this command", color=0xe100ff)
     await interaction.response.send_message(embed=embeded)
-
-@bot.event
-async def on_command_error(ctx, error):
-    await ctx.send("An error has occurred")
-
 '''
-
 @bot.command()
 async def ovation(ctx):
-    url = "https://services.swpc.noaa.gov/products/animations/ovation_north_24h.json"
-    json_url = urlopen(url)
-    data = json.loads(json_url.read())
-    lenght=len(data)
-    #await ctx.send(lenght)
-    for index in range(210, lenght):
-        x = json.dumps(data[index])
-        #await ctx.send(data[0])
-        y = json.loads(x)
-        data_url = "https://services.swpc.noaa.gov/" + y["url"]
-        image_name = "aurora_North_" + str(index) + ".jpg"
-        myPath = "./image"
-        fullfilename = os.path.join(myPath, image_name)
-        #await ctx.send(fullfilename)
-        urllib.request.urlretrieve(data_url, fullfilename)
-    make_gif(myPath)
-    await ctx.send(file=discord.File('Aurora_North.gif'))
-
+    myPath = Toolbox.jsonParser()
+    Toolbox.make_gif(myPath)
+    pathed_filename = os.path.join("./_media", "Aurora_North.gif")
+    await ctx.send(file=discord.File(pathed_filename))
 '''
+@bot.event # Removed so that it doesn't fuck up the ovation command since that takes so long
+async def on_command_error(ctx, error): # Not sure this dones anything anymore
+    await ctx.send(str(error))
 
 bot.run(TOKEN)
