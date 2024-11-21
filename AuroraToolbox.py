@@ -12,13 +12,6 @@ def ImageRetriever(imagepath: str, mediapath: str):
     urllib.request.urlretrieve(data_url, pathed_filename)
     return pathed_filename
 
-'''def ImageRetriever(imagepath: str, imagename: str, mediapath: str):
-    """Goes to (https://services.swpc.noaa.gov) to retrieve images using the url path to that image and the path to where to download it to"""
-    data_url = "https://services.swpc.noaa.gov/" + imagepath
-    pathed_filename = os.path.join(mediapath, imagename)
-    urllib.request.urlretrieve(data_url, pathed_filename)
-    return pathed_filename'''
-
 def make_gif(frame_folder):
     frames = [Image.open(image) for image in glob.glob(f"{frame_folder}/*.jpg")]
     frame_one = frames[0]
@@ -39,21 +32,7 @@ def jsonParser(myPath):
         pathed_filename = os.path.join(myPath, image_name)
         urllib.request.urlretrieve(data_url, pathed_filename)
     return(myPath)
-'''
-def jsonParser(jsonurl: str, mediapath: str):
-    json = urlopen(jsonurl)
-    jsondata = json.loads(json.read())
-    jsonlength = len(jsondata)
-    for index in range(500, jsonlength):
-        x = json.dumps(jsondata[index])
-        #await ctx.send(data[0])
-        y = json.loads(x)
-        data_url = "https://services.swpc.noaa.gov/" + y["url"]
-        image_name = "aurora_North_" + str(index) + ".jpg"
-        pathed_filename = os.path.join(mediapath, image_name)
-        urllib.request.urlretrieve(data_url, pathed_filename)
-    return()
-'''
+
 def VideoProducer(t_0, t_w, f_w): # NOT DONE
     """Example."""
     GIF_Name = "Aurora_North.gif"
