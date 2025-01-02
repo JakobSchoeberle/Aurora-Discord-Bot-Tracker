@@ -75,6 +75,6 @@ async def slash_command(interaction:discord.Interaction):
 
 @bot.event
 async def on_command_error(ctx, error):
-    await ctx.send(str(error))
+    await ctx.reply(str(error))
 
 bot.run(TOKEN)
