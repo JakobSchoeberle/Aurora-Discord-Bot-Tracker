@@ -3,9 +3,10 @@ import asyncio
 import discord
 import urllib.request
 import AuroraToolbox as Toolbox
+import datetime
 
 from urllib.request import urlopen 
-from discord.ext import commands
+from discord.ext import commands, tasks
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,8 +16,25 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="/", intents=intents)
 
+utc = datetime.timezone.utc
+
+times = [
+    datetime.time(hour=8, tzinfo=utc),
+    datetime.time(hour=2, minute=5, tzinfo=utc),
+    datetime.time(hour=16, minute=40, second=30, tzinfo=utc)
+]
+
+#@tasks.loop(time=times)
+#async def my_task():
+#    await print("My task is running!")
+
+@tasks.loop(seconds=5.0)
+async def my_task():
+    print("My task is running!")
+
 @bot.event
 async def on_ready():
+    my_task.start()
     await bot.tree.sync()
 
 @bot.tree.command(name="tonight", description="Forecasted Aurora Viewline for Tonight")
@@ -54,5 +72,9 @@ async def slash_command(interaction:discord.Interaction):
 async def slash_command(interaction:discord.Interaction):
     embeded=discord.Embed(title="Aurora Borealis Tracker Commands", description="This bot is designed to provide Aurora Borealis Forecast in Discord.\n\n**Commands:**\n•`/tonight` This displays the NOAA Forcast for tonight\n\n•`/tomorrow` This displays the NOAA Forcast for tomorrow\n\n•`/help` You just used this command", color=0xe100ff)
     await interaction.response.send_message(embed=embeded)
+
+@bot.event
+async def on_command_error(ctx, error):
+    await ctx.send(str(error))
 
 bot.run(TOKEN)
