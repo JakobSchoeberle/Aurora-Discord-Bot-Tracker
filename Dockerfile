@@ -5,5 +5,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 ADD Bot.py .
 ADD AuroraToolbox.py .
+ADD .env .
+
+VOLUME [ "/_media" ]
 
 CMD ["python3", "Bot.py"] 
